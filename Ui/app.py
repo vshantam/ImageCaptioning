@@ -4,6 +4,7 @@ import dash
 from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
+import dash_daq as daq
 import plotly.graph_objs as go
 import dash_reusable_components as drc
 import base64
@@ -47,10 +48,17 @@ styles1 = {
     }
 }
 
+theme = {
+    'dark': False,
+    'detail': '#007439',
+    'primary': '#00EA64', 
+    'secondary': '#6E6E6E'
+}
+
 
 app.scripts.config.serve_locally = True
 
-app.layout = html.Div(style={'backgroundColor': "#b533b8","height":"600%"}, children=[
+app.layout = html.Div(style={'backgroundColor': "#000403","height":"600%"}, children=[
     html.H1(
         children='Image Captioning',
         style={
@@ -73,13 +81,13 @@ app.layout = html.Div(style={'backgroundColor': "#b533b8","height":"600%"}, chil
     										dcc.Upload(
         										id='upload-image',
         										children=html.Div([
-            										'Drag and Drop or ',
+            										'Drag and Drop or  ',
             										html.Button('Select Files',style = {
 													"color":"Green"
 															})
         										]),
         										style={
-           										 'width': '100%',
+           										 'width': '100%',"color":"Blue",
 
             										'height': '60px',
 
@@ -108,7 +116,7 @@ app.layout = html.Div(style={'backgroundColor': "#b533b8","height":"600%"}, chil
 
 
 def parse_contents(contents, filename, date):
-    res =  main('/root/Pytorch/Final Project/pytorch_challenge/flower_data/train/1/'+filename)
+    res =  main('/root/ImageCaptioning/data/resized2017/'+filename)
     #print(res)
     return html.Div([
         html.H5(filename),
@@ -137,14 +145,21 @@ def parse_contents(contents, filename, date):
 	
         html.Div('Raw Content:',style = {'color':"Blue",
 					'textAlign': 'center'}),
-        html.P( res+ '...', style={
-            'whiteSpace': 'pre-wrap',
-            'wordBreak': 'break-all', 'margin-left':"380px",'color':"white"
-        }),
+#        html.P( res+ '...', style={
+#            'whiteSpace': 'pre-wrap',
+#            'wordBreak': 'break-all', 'margin-left':"380px",'color':"Black"
+#        }),
+		dcc.Textarea(
+    placeholder='Enter a value...',
+    value=res[7:-5],
+    style={'width': '100%'}
+),
 	html.Hr(),
 	html.Pre(id='hover-data', style=styles1['pre']),
 
+
     ])
+
 
 
 @app.callback(Output('output-image-upload', 'children'),
@@ -190,9 +205,11 @@ def main(image):
     decoder = decoder.to(device)
 
     # Load the trained model parameters
-    encoder.load_state_dict(torch.load('/root/ImageCaptioning/models/encoder-5-3000.pkl'))
-    decoder.load_state_dict(torch.load('/root/ImageCaptioning/models/decoder-5-3000.pkl'))
+    encoder.load_state_dict(torch.load('/root/ImageCaptioning/models/encoder-5-3000.pkl', map_location='cpu'))
+    decoder.load_state_dict(torch.load('/root/ImageCaptioning/models/decoder-5-3000.pkl', map_location='cpu'))
 
+    encoder.eval()
+    decoder.eval()
     # Prepare an image
     image = load_image(image, transform)
     image_tensor = image.to(device)
@@ -214,10 +231,9 @@ def main(image):
     # Print out the image and the generated caption
     return(sentence)
 
-
-
-
 if __name__ == '__main__':
 
     app.run_server(debug=True)
+
+
 
