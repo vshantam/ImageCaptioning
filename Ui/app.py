@@ -11,13 +11,19 @@ import base64
 import torch
 import matplotlib.pyplot as plt
 import numpy as np 
-import argparse
 import pickle 
 import os
 from torchvision import transforms 
 from build_vocab import Vocabulary
 from model import EncoderCNN, DecoderRNN
 from PIL import Image
+import cv2
+import plotly.plotly as py
+import plotly.tools as tls
+import pyttsx3
+import time
+from gtts import gTTS
+
 
 #external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 external_css = [
@@ -37,7 +43,7 @@ app = dash.Dash(__name__, external_stylesheets=external_css)
 colors = {
 
     'background': '#FFFFFF',
-    'text': "blue"#'#7FDBFF'
+    'text': "blue"
 }
 
 
@@ -58,73 +64,44 @@ theme = {
 
 app.scripts.config.serve_locally = True
 
-app.layout = html.Div(style={'backgroundColor': "#000403","height":"600%"}, children=[
-    html.H1(
-        children='Image Captioning',
-        style={
+
+app.layout = html.Div([
+	html.Div([html.H2('Image Captioning App',id='title')],className="banner"),
+
+    dcc.Upload(id='upload-data',children=html.Div(['Drag and Drop or ',html.Button('Select Files',style = {"color":"green"})]),
+       style={
+            'width': '98%',
+            'height': '60px',
+            'lineHeight': '60px',
+            'borderWidth': '1px',
+            'borderStyle': 'dashed',
+            'borderRadius': '5px',
             'textAlign': 'center',
-            'color': colors['text']
-        }
+            'margin': '10px'
+        },
+        # Allow multiple files to be uploaded
+        multiple=True
     ),
+    html.Div(id='output-data-upload')
 
-    html.Div(children='Caption: Generates a Image Description', style={
-        'textAlign': 'center',
-        'color': colors['text']
-    }),
-	html.Div(
-		html.Div(
-			children=[
-				html.Div(
-					className="two columns",
-							children=[
-								html.Div(children=[
-    										dcc.Upload(
-        										id='upload-image',
-        										children=html.Div([
-            										'Drag and Drop or  ',
-            										html.Button('Select Files',style = {
-													"color":"Green"
-															})
-        										]),
-        										style={
-           										 'width': '100%',"color":"Blue",
+])
 
-            										'height': '60px',
 
-            										'lineHeight': '60px',
-
-            										'borderWidth': '1px',
-
-            										'borderStyle': 'dashed',
-
-            										'borderRadius': '5px',
-
-           										 'textAlign': 'center',
-
-           										 'margin': '10px'
-       											 },
-        										# Allow multiple files to be uploaded
-      											  multiple=True
-   								 ),
-    								html.Div(id='output-image-upload'),
-
-								])
-							])
-						])
-					)
-			])
-
+       
 
 def parse_contents(contents, filename, date):
+    
+    global res
     res =  main('/root/ImageCaptioning/data/resized2017/'+filename)
-    #print(res)
+
+    text_list.append(res[7:-5])
     return html.Div([
-        html.H5(filename),
-        html.H6(datetime.datetime.fromtimestamp(date)),
+        html.H5("File Name:"+filename),
+        html.H6("Time Stamp:"+str(datetime.datetime.fromtimestamp(date))),
 
         # HTML images accept base64 encoded strings in the same format
         # that is supplied by the upload
-        html.Img(src=contents,style = {'position': 'inline-block',
+        html.Img(src=contents,style = {'position': 'bottom-left',
 	
 					"width":"25%","height":"30%", 
 	
@@ -162,18 +139,46 @@ def parse_contents(contents, filename, date):
 
 
 
-@app.callback(Output('output-image-upload', 'children'),
-              [Input('upload-image', 'contents')],
-              [State('upload-image', 'filename'),
-               State('upload-image', 'last_modified')])
+
+@app.callback(Output('output-data-upload', 'children'),
+              [Input('upload-data', 'contents')],
+              [State('upload-data', 'filename'),
+              State('upload-data', 'last_modified')])
 
 def update_output(list_of_contents, list_of_names, list_of_dates):
-    if list_of_contents is not None:
-        children = [
-            parse_contents(c, n, d) for c, n, d in
-            zip(list_of_contents, list_of_names, list_of_dates)]
-        return children
+    try:
+        global text_list
+        text_list = []
+        if list_of_contents is not None:
+            children = [
+                parse_contents(c, n, d) for c, n, d in
+                zip(list_of_contents, list_of_names, list_of_dates)]
 
+            return children
+    finally:
+        
+        time.sleep(1)
+        # initialisation 
+        engine = pyttsx3.init() 
+        engine.setProperty('voice', 'english')
+        engine.setProperty('rate', 170)
+        # testing
+        for i in text_list:
+            if len(text_list) < 2:
+                #engine.say("The Image is about")
+                #engine.say(i)
+                tts = gTTS(text=i, lang='en')
+                tts.save("good.mp3")
+                os.system("mpg321 good.mp3")
+            else:
+                #engine.say("The Image"+str(text_list.index(i)+1)+str("is about")+i)
+
+                tts = gTTS(text="Image"+str(text_list.index(i)+1)+str("is about")+i, lang='en')
+                tts.save("good.mp3")
+                os.system("mpg321 good.mp3") 
+        engine.runAndWait() 
+
+    
 
 # Device configuration
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -231,9 +236,8 @@ def main(image):
     # Print out the image and the generated caption
     return(sentence)
 
+
 if __name__ == '__main__':
 
     app.run_server(debug=True)
-
-
 
