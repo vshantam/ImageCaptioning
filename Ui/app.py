@@ -7,7 +7,6 @@ import dash_html_components as html
 import dash_daq as daq
 import plotly.graph_objs as go
 import dash_reusable_components as drc
-import base64
 import torch
 import matplotlib.pyplot as plt
 import numpy as np 
