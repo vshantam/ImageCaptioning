@@ -91,7 +91,7 @@ app.layout = html.Div([
 def parse_contents(contents, filename, date):
     
     global res
-    res =  main('/root/ImageCaptioning/data/resized2017/'+filename)
+    res =  main('data/resized2014/'+filename)
 
     text_list.append(res[7:-5])
     return html.Div([
@@ -199,7 +199,7 @@ def main(image):
                              (0.229, 0.224, 0.225))])
     
     # Load vocabulary wrapper
-    with open('/root/ImageCaptioning/data/vocab.pkl', 'rb') as f:
+    with open('data/vocab.pkl', 'rb') as f:
         vocab = pickle.load(f)
 
     # Build models
@@ -209,8 +209,8 @@ def main(image):
     decoder = decoder.to(device)
 
     # Load the trained model parameters
-    encoder.load_state_dict(torch.load('/root/ImageCaptioning/models/encoder-5-3000.pkl', map_location='cpu'))
-    decoder.load_state_dict(torch.load('/root/ImageCaptioning/models/decoder-5-3000.pkl', map_location='cpu'))
+    encoder.load_state_dict(torch.load('models/encoder-5-3000.pkl', map_location='cpu'))
+    decoder.load_state_dict(torch.load('models/decoder-5-3000.pkl', map_location='cpu'))
 
     encoder.eval()
     decoder.eval()
