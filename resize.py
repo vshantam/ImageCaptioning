@@ -34,8 +34,8 @@ class Resizer(object):
 	@classmethod
 	def main(self,args):
 
-		image_dir = './data/train2017/'
-		output_dir = './data/resized2017/'
+		image_dir = './data/train2014/'
+		output_dir = './data/resized2014/'
 		image_size = [256, 256]
 		self.resize_images(image_dir, output_dir, image_size)
 

@@ -32,7 +32,7 @@ def main():
         vocab = pickle.load(f)
     
     # Build data loader
-    data_loader = get_loader('data/resized2017', 'data/annotations/captions_train2017.json', vocab, 
+    data_loader = get_loader('data/resized2014', 'data/annotations/captions_train2014.json', vocab, 
                              transform, 128,
                              shuffle=True, num_workers=2) 
 
