@@ -14,8 +14,6 @@ import matplotlib.colors as colors
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import threading
-from multiprocessing import Process, Manager, Queue
-from queue import Empty
 from torchvision import transforms
 from build_vocab import Vocabulary
 from model import EncoderCNN, DecoderRNN
@@ -231,8 +229,8 @@ class New_Toplevel:
             decoder = decoder.to(device)
 
             # Load the trained model parameters
-            encoder.load_state_dict(torch.load('/root/ImageCaptioning/models/encoder-5-3000.pkl', map_location='cpu'))
-            decoder.load_state_dict(torch.load('/root/ImageCaptioning/models/decoder-5-3000.pkl', map_location='cpu'))
+            encoder.load_state_dict(torch.load('models/encoder-5-3000.pkl', map_location='cpu'))
+            decoder.load_state_dict(torch.load('models/decoder-5-3000.pkl', map_location='cpu'))
 
             encoder.eval()
             decoder.eval()
