@@ -37,7 +37,7 @@ $ ./download.sh
 
 Using pip3 version if not installed use the following command:
 
-    sudo apt-get install python3-pip3
+    sudo apt-get install python3-pip
 
 ```bash
 $ pip3 install -r requirements.text
