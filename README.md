@@ -240,3 +240,9 @@ Now the model has been trained considering trained on GPU using CUDA 9.0(if avai
 ![alt_tag](./png/Web_Ui_1.png)
 
 ![alt_tag](./png/Web_Ui_2.png)
+
+<B> Desktop Based UI </B>
+
+![alt_tag](./png/Desktop_Ui_1.png)
+
+![alt_tag](./png/Desktop_Ui_2.png)
