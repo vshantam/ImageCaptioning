@@ -8,6 +8,9 @@ import sys
 from tkinter import filedialog
 import PIL
 import cv2
+from scipy import misc
+import numpy as np
+import matplotlib.colors as colors
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import threading
@@ -27,6 +30,7 @@ try:
     from Tkinter import *
 except ImportError:
     from tkinter import *
+    import tkinter
 
 try:
     import ttk
@@ -86,22 +90,21 @@ class New_Toplevel:
         top.title("New Toplevel")
         top.configure(highlightcolor="black")
 
-        self.bgimage = PIL.Image.open('images.png')
+        self.bgimage = PIL.Image.open("images.png")
         self.photo_image = PIL.ImageTk.PhotoImage(self.bgimage)
         self.Canvas1 = Canvas(top)
         self.Canvas1.place(relx=0.01, rely=0.01, relheight=0.97, relwidth=0.98)
-        self.Canvas1.configure(background="#95d6d8")
+        self.Canvas1.configure(background="#002a3e")#"#95d6d8")
         self.Canvas1.configure(borderwidth="2")
-        self.Canvas1.configure(relief=RIDGE)
+        self.Canvas1.configure(relief=RAISED)
         self.Canvas1.configure(selectbackground="#c4c4c4")
         self.Canvas1.configure(width=1341)
-        self.Canvas1.create_image(560,280, image=self.photo_image, anchor='nw')
+        self.Canvas1.create_image(570,280, image=self.photo_image, anchor='nw')
 
         self.Frame2 = Frame(self.Canvas1)
         self.Frame2.place(relx=0.058, rely=0.20, relheight=0.08, relwidth=0.3)
-        self.Frame2.configure(relief=GROOVE)
         self.Frame2.configure(borderwidth="2")
-        self.Frame2.configure(relief=GROOVE)
+        self.Frame2.configure(relief=RAISED)
         self.Frame2.configure(width=365)
 
         self.Message2 = Message(self.Frame2)
@@ -112,14 +115,13 @@ class New_Toplevel:
 
         self.Frame3 = Frame(self.Canvas1)
         self.Frame3.place(relx=0.65, rely=0.20, relheight=0.08, relwidth=0.3)
-        self.Frame3.configure(relief=GROOVE)
         self.Frame3.configure(borderwidth="2")
-        self.Frame3.configure(relief=GROOVE)
+        self.Frame3.configure(relief=RAISED)
         self.Frame3.configure(width=405)
 
         self.Message1_1 = Message(self.Frame3)
         self.Message1_1.place(relx=0.23, rely=0.28, relheight=0.3, relwidth=0.5)
-        self.Message1_1.configure(text='''3D Histogram''')
+        self.Message1_1.configure(text='''HUE SATURATION INTENSITY''')
         self.Message1_1.configure(width=342)
         self.Message1_1.configure(foreground="#ff0000")
 
@@ -127,43 +129,41 @@ class New_Toplevel:
 
         self.Frame1 = Frame(self.Canvas1)
         self.Frame1.place(relx=0.14, rely=0.04, relheight=0.09, relwidth=0.7)
-        self.Frame1.configure(relief=GROOVE)
         self.Frame1.configure(borderwidth="2")
-        self.Frame1.configure(relief=GROOVE)
+        self.Frame1.configure(relief=RAISED)
         self.Frame1.configure(background="#7b1ed8")
         self.Frame1.configure(width=935)
 
         self.Frame1_1 = Frame(self.Frame1)
         self.Frame1_1.place(relx=0.25, rely=1.78, relheight=0.08, relwidth=0.0)
-        self.Frame1_1.configure(relief=GROOVE)
         self.Frame1_1.configure(borderwidth="2")
-        self.Frame1_1.configure(relief=GROOVE)
+        self.Frame1_1.configure(relief=RAISED)
         self.Frame1_1.configure(width=-35)
 
         self.Message1 = Message(self.Frame1)
         self.Message1.place(relx=0.34, rely=0.15, relheight=0.69, relwidth=0.39)
-        self.Message1.configure(foreground="#ff0000")
+        self.Message1.configure(foreground="#ff0000", relief = RAISED)
         self.Message1.configure(text='''AUTO IMAGE CAPTIONING''')
         self.Message1.configure(width=362)
 
         self.Canvas2 = Canvas(self.Canvas1)
         self.Canvas2.place(relx=0.01, rely=0.28, relheight=0.55, relwidth=0.39)
-        self.Canvas2.configure(background="#757bd8")
+        self.Canvas2.configure(background="#f4ffe6")
         self.Canvas2.configure(borderwidth="2")
-        self.Canvas2.configure(relief=RIDGE)
+        self.Canvas2.configure(relief=RAISED)
         self.Canvas2.configure(selectbackground="#c4c4c4")
         self.Canvas2.configure(width=521)
 
 
         self.Canvas3 = Canvas(self.Canvas1)
         self.Canvas3.place(relx=0.6, rely=0.28, relheight=0.55, relwidth=0.39)
-        self.Canvas3.configure(background="#8080ff")
+        self.Canvas3.configure(background="#f4ffe6")
         self.Canvas3.configure(borderwidth="2")
-        self.Canvas3.configure(relief=RIDGE)
+        self.Canvas3.configure(relief=RAISED)
         self.Canvas3.configure(selectbackground="#c4c4c4")
         self.Canvas3.configure(width=521)
 
-        self.TButton2 = ttk.Button(self.Canvas1)
+        self.TButton2 = tkinter.Button(self.Canvas1, relief = RAISED)
         self.TButton2.place(relx=0.47, rely=0.94, height=28, width=83)
         self.TButton2.configure(takefocus="")
         self.TButton2.configure(text='''Speak''', command = self.speak())
@@ -174,12 +174,12 @@ class New_Toplevel:
         self.Entry1.configure(font=font10)
         self.Entry1.configure(selectbackground="#c4c4c4")
 
-        self.TButton1 = ttk.Button(self.Canvas1)
+        self.TButton1 = tkinter.Button(self.Canvas1, relief = RAISED)
         self.TButton1.place(relx=0.45, rely=0.74, height=28, width=117)
         self.TButton1.configure(takefocus="")
         self.TButton1.configure(text='''Create Caption''', command = self.start())
 
-        self.TButton3 = ttk.Button(self.Canvas1)
+        self.TButton3 = tkinter.Button(self.Canvas1, relief = RAISED)
         self.TButton3.place(relx=0.42, rely=0.23, height=48, width=219)
         self.TButton3.configure(takefocus="")
         self.TButton3.configure(text='''Click To Upload An Image''', command = self.open_file())
@@ -189,9 +189,9 @@ class New_Toplevel:
         def act_speak():
             engine = pyttsx3.init() 
             engine.setProperty('voice', 'english')
-            engine.setProperty('rate', 170)
+            engine.setProperty('rate', 135)
 
-            engine.say("The Image"+str("is about")+self.sentence[7:-5])
+            engine.say(self.sentence[7:-5])
 
             engine.runAndWait()
         return act_speak 
@@ -267,22 +267,44 @@ class New_Toplevel:
 
         def return_image():
             self.path=filedialog.askopenfilename(filetypes=[("Image File",'.*')])
+            print(self.path)
+
             img = cv2.imread(self.path)
             newimg = cv2.resize(img,(int(520),int(380)))
             cv2.imwrite("temp/resizeimg.jpg",newimg)
-            hsv_image = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-            h,s,v = cv2.split(hsv_image)
-            fig = plt.figure(figsize=(8,7))
-            ax = plt.axes(projection='3d'), plt.title("Histogram 3D")
-            ax = fig.add_subplot(111, projection='3d')
-            ax.view_init(91,270)
-            plt.hist(h.ravel(), 256, [0, 256])
-            plt.hist(s.ravel(), 256, [0, 256])
-            plt.hist(v.ravel(), 256, [0, 256])
+ 
+            img = misc.imread(self.path)
+            array=np.asarray(img)
+            arr=(array.astype(float))/255.0
+            img_hsv = colors.rgb_to_hsv(arr[...,:3])
+
+            lu1=img_hsv[...,0].flatten()
+            plt.subplot(1,3,1)
+            plt.hist(lu1*360,bins=360,range=(0.0,360.0),histtype='stepfilled', color='r', label='Hue')
+            plt.title("Hue")
+            plt.xlabel("Value")
+            plt.ylabel("Frequency")
+
+            lu2=img_hsv[...,1].flatten()
+            plt.subplot(1,3,2)                  
+            plt.hist(lu2,bins=100,range=(0.0,1.0),histtype='stepfilled', color='g', label='Saturation')
+            plt.title("Saturation")   
+            plt.xlabel("Value")
+            plt.yticks()  
+
+
+            lu3=img_hsv[...,2].flatten()
+            plt.subplot(1,3,3)                  
+            plt.hist(lu3*255,bins=256,range=(0.0,255.0),histtype='stepfilled', color='b', label='Intesity')
+            plt.title("Intensity")   
+            plt.xlabel("Value")
+            plt.yticks()   
+
             plt.savefig("temp/plot.png")
             imggraph = cv2.imread("temp/plot.png")
-            newimgplot = cv2.resize(imggraph,(520,480))
+            newimgplot = cv2.resize(imggraph,(550,380))
             cv2.imwrite("temp/resizeimgplot.png",newimgplot)
+
             self.Canvas2.image = ImageTk.PhotoImage(file = "temp/resizeimg.jpg")
             self.Canvas2.create_image((0,0), image = self.Canvas2.image, anchor = "nw")
             self.Canvas3.image = ImageTk.PhotoImage(file = "temp/resizeimgplot.png")
