@@ -1,5 +1,5 @@
 # Image Captioning
-The goal of image captioning is to convert a given input image into a natural language description. The encoder-decoder framework is widely used for this task. The image encoder is a convolutional neural network (CNN). In this tutorial, we used [resnet-152](https://arxiv.org/abs/1512.03385) model pretrained on the [ILSVRC-2012-CLS](http://www.image-net.org/challenges/LSVRC/2012/) image classification dataset. The decoder is a long short-term memory (LSTM) network. 
+The goal of image captioning is to convert a given input image into a natural language description. The encoder-decoder framework is widely used for this task. The image encoder is a convolutional neural network (CNN). In this tutorial, we used [resnet-152](https://arxiv.org/abs/1512.03385) model pretrained on the [ILSVRC-2012-CLS](http://www.image-net.org/challenges/LSVRC/2012/) image classification dataset. The decoder is a long short-term memory (LSTM) network.
 
 ![alt text](png/model.png)
 
@@ -11,7 +11,7 @@ In the test phase, the encoder part is almost same as the training phase. The on
 
 
 
-## Usage 
+## Usage
 
 
 #### 1. Clone the repositories
@@ -19,11 +19,10 @@ In the test phase, the encoder part is almost same as the training phase. The on
 $ git clone https://github.com/pdollar/coco.git
 $ cd coco/PythonAPI/
 $ make
-$ python setup.py build
-$ python setup.py install
+$ python3 setup.py build
+$ python3 setup.py install
 $ cd ../../
-$ git clone https://github.com/yunjey/pytorch-tutorial.git
-$ cd pytorch-tutorial/tutorials/03-advanced/image_captioning/
+$ git clone https://github.com/vshantam/ImageCaptioning
 ```
 
 #### 2. Download the dataset
@@ -34,26 +33,25 @@ $ chmod +x download.sh
 $ ./download.sh
 ```
 
-#### 3. Preprocessing
+#### 3. Install requirements
+
+Using pip3 version if not installed use the following command:
+
+    sudo apt-get install python3-pip3
 
 ```bash
-$ python build_vocab.py   
-$ python resize.py
+$ pip3 install -r requirements.text
 ```
 
-#### 4. Train the model
+#### 4. Preprocessing
 
 ```bash
-$ python train.py    
+$ python3 build_vocab.py   
+$ python3 resize.py
 ```
 
-#### 5. Test the model 
+#### 5. Train the model
 
 ```bash
-$ python sample.py --image='png/example.png'
+$ python3 train.py    
 ```
-
-<br>
-
-## Pretrained model
-If you do not want to train the model from scratch, you can use a pretrained model. You can download the pretrained model [here](https://www.dropbox.com/s/ne0ixz5d58ccbbz/pretrained_model.zip?dl=0) and the vocabulary file [here](https://www.dropbox.com/s/26adb7y9m98uisa/vocap.zip?dl=0). You should extract pretrained_model.zip to `./models/` and vocab.pkl to `./data/` using `unzip` command.
