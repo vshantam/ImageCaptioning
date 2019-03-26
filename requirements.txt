@@ -2,4 +2,15 @@ matplotlib
 nltk
 numpy
 Pillow
-argparse
+torch
+torchvision
+dash
+dash_core_components
+dash_html_components
+dash_daq
+plotly
+pyttsx3
+gtts
+matplotlib
+opencv-python
+scipy
