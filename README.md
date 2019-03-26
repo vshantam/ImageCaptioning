@@ -232,3 +232,11 @@ $ python3 resize.py
 $ python3 train.py    
 ```
 Now the model has been trained considering trained on GPU using CUDA 9.0(if available) or else cpu is also fine.In this process model has been trained upto 5 epochs and more than 4000+ steps and been stored in the model directory as named as encoder and decoder.
+
+### 6. results
+
+<B> Web Based UI </B>
+
+![alt_tag](./png/Web_Ui_1.png)
+
+![alt_tag](./png/Web_Ui_2.png)
