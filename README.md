@@ -237,11 +237,43 @@ Now the model has been trained considering trained on GPU using CUDA 9.0(if avai
 
 <B> Web Based UI </B>
 
+To Use Web ui or dashboard follow the step to change the directory and running the applicatons.
+
+	cd /ImageCaptioning/Ui/
+	ipython3 app.py
+		(or)
+	python3 app.py
+
+The server will be running on local server as shown in the image just open the link in your default browser to se the applicaton running.
+
+![alt_tag](./png/wsetup1.png)
+
+![alt_tag](./png/wsetup2.png)
+
+![alt_tag](./png/wsetup3.png)
+
+Result
+
 ![alt_tag](./png/Web_Ui_1.png)
 
 ![alt_tag](./png/Web_Ui_2.png)
 
 <B> Desktop Based UI </B>
+
+To Use the Desktop Ui change the directory to  the following:
+
+	cd /ImageCaptioning/Desktop_Ui/
+	ipython3 fpgui.py
+		(or)
+	python3 fpgui.py
+
+The Gui will be automatically open in the new window then you will be able to use the application as shown in the image.
+
+![alt_tag](./png/Dsetup1.png)
+
+![alt_tag](./png/Dsetup2.png)
+
+Result
 
 ![alt_tag](./png/Desktop_Ui_1.png)
 
